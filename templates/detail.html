@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Detail Resep - Recipe Finder</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo">Recipe Finder.</div>
+    <p>Discover delicious recipes from around the world</p>
+</header>
+
+<main class="container">
+
+    <a href="{{ url_for('index') }}" class="detail-button">
+        ← Back to Search
+    </a>
+
+    {% if error %}
+
+        <div class="message">{{ error }}</div>
+
+    {% elif meal %}
+
+        <div class="pokemon-card">
+
+            <h1>{{ meal.strMeal }}</h1>
+
+            <img
+                src="{{ meal.strMealThumb }}"
+                alt="{{ meal.strMeal }}"
+            >
+
+            <p>
+                Kategori: {{ meal.strCategory }}
+                |
+                Asal: {{ meal.strArea }}
+            </p>
+
+            <h2>Bahan-bahan</h2>
+
+            <div class="ingredients">
+                <ul>
+                    {% for i in range(1, 21) %}
+                        {% set ingredient = meal.get('strIngredient' ~ i) %}
+                        {% set measure = meal.get('strMeasure' ~ i) %}
+
+                        {% if ingredient and ingredient.strip() %}
+                            <li>
+                                {{ ingredient }} - {{ measure }}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <h2>Instruksi Memasak</h2>
+
+            <p class="instructions">
+                {{ meal.strInstructions }}
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</main>
+
+<footer>
+    <p>Powered by TheMealDB API</p>
+    <p>Recipe Finder © 2026</p>
+</footer>
+
+</body>
+</html>

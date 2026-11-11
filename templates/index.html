@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Recipe Finder</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">Recipe Finder.</div>
+        <p>Discover delicious recipes from around the world</p>
+    </header>
+
+    <main class="container">
+
+        <section class="hero">
+            <h1>Find Your Favorite Recipe</h1>
+            <p>Explore delicious meals and discover new cooking ideas.</p>
+
+            <form method="POST" class="search-form">
+                <input
+                    type="text"
+                    name="keyword"
+                    placeholder="Search food... (e.g. chicken, pasta)"
+                    value="{{ keyword if keyword != 'ERROR_API' else '' }}"
+                    required
+                >
+
+                <button type="submit">Search</button>
+            </form>
+        </section>
+
+        <section class="results">
+
+            {% if keyword == "ERROR_API" %}
+
+                <div class="message">
+                    Gagal menghubungi API. Periksa koneksi internet.
+                </div>
+
+            {% elif meals %}
+
+                <h2>Search Results</h2>
+
+                <div class="recipe-grid">
+
+                    {% for meal in meals %}
+
+                    <div class="recipe-card">
+
+                        <img
+                            src="{{ meal.strMealThumb }}"
+                            alt="{{ meal.strMeal }}"
+                        >
+
+                        <div class="recipe-info">
+
+                            <h3>{{ meal.strMeal }}</h3>
+
+                            <p>
+                                {{ meal.strCategory }}
+                                ·
+                                {{ meal.strArea }}
+                            </p>
+
+                            <a href="{{ url_for('detail', meal_id=meal.idMeal) }}"
+                               class="detail-button">
+                                View Recipe
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% elif keyword %}
+
+                <div class="message">
+                    Recipe not found. Try another food!
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Powered by TheMealDB API</p>
+        <p>Recipe Finder © 2026</p>
+    </footer>
+
+</body>
+</html>
